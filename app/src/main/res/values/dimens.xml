@@ -1,0 +1,7 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="listview_pad">5dp</dimen>
+    <dimen name="data_view_pad">10dp</dimen>
+    <dimen name="img_h">250</dimen>
+    <dimen name="img_w">250</dimen>
+</resources>
