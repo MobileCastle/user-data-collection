@@ -1,14 +1,12 @@
 package com.userdatacollection.Adapter
 
-import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
 import com.userdatacollection.Database.UserModel
 import com.userdatacollection.R
+import com.userdatacollection.Utils.Utils
 import kotlinx.android.synthetic.main.data_item_row.view.*
 
 class UserDataAdapter(private val userData: ArrayList<UserModel>) :
@@ -43,24 +41,10 @@ class UserDataAdapter(private val userData: ArrayList<UserModel>) :
 
         fun bindUserData(userModel: UserModel) {
             this.userModel = userModel
-            Picasso.get()
-                .load(Uri.parse(userModel.photo.toString()))
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .error(R.drawable.ic_launcher_foreground)
-                .resize(500, 500)
-                .centerInside()
-                .into(view.userImage, object : Callback {
-                    override fun onSuccess() {
-                        Log.d("IMAGE", "success")
-                    }
-
-                    override fun onError(e: Exception?) {
-                        Log.d("IMAGE", e!!.message.toString())
-                    }
-                })
+            view.userImage.setImageBitmap(Utils.getImage(userModel.image))
             view.userName.text = userModel.name
             view.userEmail.text = userModel.email
-            view.userPhone.text = userModel.photo
+            view.userPhone.text = userModel.phone
         }
     }
 

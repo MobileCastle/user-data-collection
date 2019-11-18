@@ -6,11 +6,12 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,12 +19,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
 import com.userdatacollection.Database.DBHelper
 import com.userdatacollection.Database.UserModel
 import com.userdatacollection.R
-import com.userdatacollection.Utils.RealPathUtil
+import com.userdatacollection.Utils.Utils
 import kotlinx.android.synthetic.main.data_add_fragment.*
 
 
@@ -31,6 +30,7 @@ class DataAddFragment : Fragment() {
 
     private lateinit var userDBHelper: DBHelper
     private var filepath: String? = ""
+    private var image: Bitmap? = null
     private var listener: Communicate? = null
 
     companion object {
@@ -107,13 +107,15 @@ class DataAddFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             var targetUri: Uri = data?.data as Uri
-            //var path = RealPathUtil.getRealPath(requireContext(), targetUri).toString()
+            user_photo.setImageURI(targetUri)
             filepath = targetUri.toString()
+            //var path = RealPathUtil.getRealPath(requireContext(), targetUri).toString()
+            /*
             view?.let {
                 Snackbar.make(it, filepath.toString(), Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
-            }
-            Picasso.get()
+            }*/
+            /*Picasso.get()
                 .load(filepath.toString())
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .error(R.drawable.ic_launcher_foreground)
@@ -127,7 +129,7 @@ class DataAddFragment : Fragment() {
                     override fun onError(e: Exception?) {
                         Log.d("IMAGE", e!!.message.toString())
                     }
-                })
+                })*/
         }
     }
 
@@ -174,8 +176,15 @@ class DataAddFragment : Fragment() {
         var name = this.user_name.text.toString()
         var email = this.user_email.text.toString()
         var phone = this.user_phone.text.toString()
+        var bitmap: Bitmap = (user_photo.drawable as BitmapDrawable).bitmap
         var usermodel =
-            UserModel(photo = filepath.toString(), name = name, email = email, phone = phone)
+            UserModel(
+                photo = filepath.toString(),
+                name = name,
+                email = email,
+                phone = phone,
+                image = Utils.getBytes(bitmap)
+            )
         userDBHelper.insertUser(usermodel)
         sendData(usermodel)
         clearView()

@@ -12,6 +12,7 @@ object UserTableContent {
             val COLUMN_NAME = "name"
             val COLUMN_EMAIL = "email"
             val COLUMN_PHONE = "phone"
+            val COLUMN_IMAGE = "image"
         }
     }
 }

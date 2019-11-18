@@ -20,7 +20,9 @@
 
         <ImageView android:id="@+id/user_photo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/img_h"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_launcher_foreground"/>
 
         <com.google.android.material.textfield.TextInputLayout

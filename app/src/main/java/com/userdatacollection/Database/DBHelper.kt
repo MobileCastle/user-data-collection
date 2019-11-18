@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
+import android.graphics.Bitmap
+import com.userdatacollection.Utils.Utils
 
 class DBHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -32,6 +34,7 @@ class DBHelper(context: Context) :
         values.put(UserTableContent.UserEntry.COLUMN_NAME, user.name)
         values.put(UserTableContent.UserEntry.COLUMN_EMAIL, user.email)
         values.put(UserTableContent.UserEntry.COLUMN_PHONE, user.phone)
+        values.put(UserTableContent.UserEntry.COLUMN_IMAGE, user.image)
 
         val newRowId = db.insert(UserTableContent.UserEntry.TABLE_NAME, null, values)
 
@@ -58,6 +61,7 @@ class DBHelper(context: Context) :
         values.put(UserTableContent.UserEntry.COLUMN_NAME, user.name)
         values.put(UserTableContent.UserEntry.COLUMN_EMAIL, user.email)
         values.put(UserTableContent.UserEntry.COLUMN_PHONE, user.phone)
+        values.put(UserTableContent.UserEntry.COLUMN_IMAGE, user.image)
 
         db.update(
             UserTableContent.UserEntry.TABLE_NAME,
@@ -90,6 +94,7 @@ class DBHelper(context: Context) :
         var name: String
         var email: String
         var phone: String
+        var image: ByteArray
         if (cursor!!.moveToFirst()) {
             while (cursor.isAfterLast == false) {
                 photo =
@@ -100,8 +105,10 @@ class DBHelper(context: Context) :
                     cursor.getString(cursor.getColumnIndex(UserTableContent.UserEntry.COLUMN_EMAIL))
                 phone =
                     cursor.getString(cursor.getColumnIndex(UserTableContent.UserEntry.COLUMN_PHONE))
+                image =
+                    cursor.getBlob(cursor.getColumnIndex(UserTableContent.UserEntry.COLUMN_IMAGE))
 
-                users.add(UserModel(userid, photo, name, email, phone))
+                users.add(UserModel(userid, photo, name, email, phone, image))
                 cursor.moveToNext()
             }
         }
@@ -127,6 +134,7 @@ class DBHelper(context: Context) :
         var name: String
         var email: String
         var phone: String
+        var image: ByteArray
         if (cursor!!.moveToFirst()) {
             while (cursor.isAfterLast == false) {
                 userid =
@@ -139,8 +147,10 @@ class DBHelper(context: Context) :
                     cursor.getString(cursor.getColumnIndex(UserTableContent.UserEntry.COLUMN_EMAIL))
                 phone =
                     cursor.getString(cursor.getColumnIndex(UserTableContent.UserEntry.COLUMN_PHONE))
+                image =
+                    cursor.getBlob(cursor.getColumnIndex(UserTableContent.UserEntry.COLUMN_IMAGE))
 
-                users.add(UserModel(userid, photo, name, email, phone))
+                users.add(UserModel(userid, photo, name, email, phone, image))
                 cursor.moveToNext()
             }
         }
@@ -157,7 +167,8 @@ class DBHelper(context: Context) :
                     UserTableContent.UserEntry.COLUMN_PHOTO + " TEXT," +
                     UserTableContent.UserEntry.COLUMN_NAME + " TEXT," +
                     UserTableContent.UserEntry.COLUMN_EMAIL + " TEXT," +
-                    UserTableContent.UserEntry.COLUMN_PHONE + " TEXT)"
+                    UserTableContent.UserEntry.COLUMN_PHONE + " TEXT," +
+                    UserTableContent.UserEntry.COLUMN_IMAGE + " BLOB)"
 
         private val SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + UserTableContent.UserEntry.TABLE_NAME
